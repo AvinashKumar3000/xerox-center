@@ -12,26 +12,21 @@
         content="Ample Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
     <meta name="robots" content="noindex,nofollow">
     <title>Ample Admin Lite Template by WrapPixel</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>
     <link rel="canonical" href="https://www.wrappixel.com/templates/ample-admin-lite/" />
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="../admin/plugins/images/favicon.png">
     <!-- Custom CSS -->
-    <link href="../admin/plugins/bower_components/chartist/dist/chartist.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../admin/plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css">
     <!-- Custom CSS -->
     <link href="../admin/css/style.min.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-firestore.js"></script>
+    
 </head>
 
-<body>
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-    <div class="preloader">
-        <div class="lds-ripple">
-            <div class="lds-pos"></div>
-            <div class="lds-pos"></div>
-        </div>
-    </div>
+<body onload="startPage()">
+    
     <!-- ============================================================== -->
     <!-- Main wrapper - style you can find in pages.scss -->
     <!-- ============================================================== -->
@@ -89,8 +84,8 @@
                         <!-- ============================================================== -->
                         <li>
                             <a class="profile-pic" href="#">
-                                <img src="../admin/plugins/images/users/varun.jpg" alt="user-img" width="36"
-                                    class="img-circle"><span class="text-white font-medium">Steave</span></a>
+                                <img id="user-photo" src="../admin/plugins/images/users/varun.jpg" alt="user-img" width="36"
+                                    class="img-circle"><span class="text-white font-medium" id="user-name">Steave</span></a>
                         </li>
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
@@ -140,13 +135,7 @@
                                 <span class="hide-menu">History</span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="blank.html"
-                                aria-expanded="false">
-                                <i class="fa fa-columns" aria-hidden="true"></i>
-                                <span class="hide-menu">Help</span>
-                            </a>
-                        </li>
+                        
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -173,8 +162,7 @@
                             <ol class="breadcrumb ml-auto">
                                 <li><a href="#">help</a></li>
                             </ol>
-                            <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank"
-                                class="btn btn-danger  d-none d-md-block pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Log out</a>
+                            <div class="btn btn-danger  d-none d-md-block pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light" onclick="logOut()">Log out</div>
                         </div>
                     </div>
                 </div>
@@ -200,7 +188,7 @@
                                             style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
                                     </div>
                                 </li>
-                                <li class="ml-auto"><span class="counter text-success">659</span></li>
+                                <li class="ml-auto"><span class="counter text-success" id="bending-count">0</span></li>
                             </ul>
                         </div>
                     </div>
@@ -213,7 +201,7 @@
                                             style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
                                     </div>
                                 </li>
-                                <li class="ml-auto"><span class="counter text-purple">869</span></li>
+                                <li class="ml-auto"><span class="counter text-purple" id="total-count">0</span></li>
                             </ul>
                         </div>
                     </div>
@@ -221,84 +209,95 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form class="form-horizontal form-material">
+                        <div class="form-horizontal form-material" > 
                             <div class="form-group mb-4">
                                 <label for="example-email" class="col-md-12 p-0">Email</label>
                                 <div class="col-md-12 border-bottom p-0">
-                                    <input type="email" placeholder="johnathan@admin.com"
+                                    <input type="email" placeholder="The email will be generated automatically"
                                         class="form-control p-0 border-0" name="example-email"
-                                        id="example-email">
+                                        id="form-email" readonly>
                                 </div>
                             </div>
                             <div class="form-group mb-4">
                                 <label class="col-md-12 p-0">Roll Number</label>
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="text" placeholder="Enter the Roll number"
-                                        class="form-control p-0 border-0"> </div>
+                                        class="form-control p-0 border-0"
+                                        id="form-roll-number"> </div>
                             </div>
                             <div class="form-group mb-4">
                                 <label class="col-md-12 p-0">Name</label>
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="text" placeholder="Enter the Name"
-                                        class="form-control p-0 border-0"> </div>
+                                        class="form-control p-0 border-0"
+                                        id="form-name" readonly> </div>
                             </div>
                             <div class="form-group mb-4">
                                 <label class="col-md-12 p-0">Year of study</label>
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="number" placeholder="Enter the year of study"
-                                        class="form-control p-0 border-0" min="1" max="4"> 
+                                        class="form-control p-0 border-0" min="1" max="4"
+                                        id="form-yos"> 
                                 </div>
                             </div>
                             <div class="form-group mb-4">
                                 <label class="col-md-12 p-0">google doc link</label>
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="text" placeholder="Enter the google document link shared in your google drive"
-                                        class="form-control p-0 border-0"> </div>
+                                        class="form-control p-0 border-0" id="form-doc-link"> </div>
                             </div>
                             <div class="form-group mb-4">
                                 <label class="col-md-12 p-0">copies</label>
                                 <div class="col-md-12 border-bottom p-0">
                                     <input type="number" placeholder="Enter the copies"
-                                        class="form-control p-0 border-0" min="1"> 
+                                        class="form-control p-0 border-0" min="1"
+                                        id="form-copies"> 
                                 </div>
                             </div>
                             <div class="form-group mb-4">
                                 <label class="col-sm-12">paper-side</label>
                                 <div class="col-sm-12 border-bottom">
-                                    <select class="form-control p-0 border-0">
-                                        <option>single</option>
-                                        <option>double</option>
+                                    <select class="form-control p-0 border-0" id="form-paper-side">
+                                        <option value="single">single</option>
+                                        <option value="double">double</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group mb-4">
                                 <label class="col-sm-12">paper-size</label>
                                 <div class="col-sm-12 border-bottom">
-                                    <select class="form-control p-0 border-0">
-                                        <option>A4</option>
-                                        <option>A3</option>
+                                    <select class="form-control p-0 border-0" id="form-paper-size">
+                                        <option value="A4">A4</option>
+                                        <option value="A3">A3</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group mb-4">
                                 <label class="col-sm-12">xerox-type</label>
                                 <div class="col-sm-12 border-bottom">
-                                    <select class="form-control p-0 border-0">
-                                        <option>black-and-white</option>
-                                        <option>color</option>
+                                    <select class="form-control p-0 border-0" id="form-xerox-type">
+                                        <option value="black-and-white">black-and-white</option>
+                                        <option value="color">color</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label class="col-sm-12">reprography center</label>
+                                <div class="col-sm-12 border-bottom">
+                                    <select class="form-control p-0 border-0" id="form-repro">
+                                        
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group mb-4">
                                 <div class="col-sm-12">
-                                    <button class="btn btn-success">submit</button>
+                                    <button class="btn btn-success" id="submit" onclick="submit()">submit</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
                 
-                </div>
             </div>
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
@@ -323,10 +322,10 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    <script src="../admin/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <scrip src="../admin/plugins/bower_components/jquery/dist/jquery.min.js"></scrip>
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="../admin/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
-    <script src="../admin/bootstrap/dist/js/bootstrap.min.js"></script>
+    <scrip src="../admin/plugins/bower_components/popper.js/dist/umd/popper.min.js"></scrip>
+    <scrip src="../admin/bootstrap/dist/js/bootstrap.min.js"></scrip>
     <script src="../admin/js/app-style-switcher.js"></script>
     <script src="../admin/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
     <!--Wave Effects -->
@@ -340,6 +339,12 @@
     <script src="../admin/plugins/bower_components/chartist/dist/chartist.min.js"></script>
     <script src="../admin/plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
     <script src="../admin/js/pages/dashboards/dashboard1.js"></script>
+    <script src="../assets/js/student-app-crud.js"></script>
+   <script>
+        function startPage() {
+           initDashboard()
+        }
+    </script>
 </body>
 
 </html>

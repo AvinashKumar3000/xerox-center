@@ -23,9 +23,14 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+<script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-firestore.js"></script>
+<script src="../assets/js/student-app-crud.js"></script>
 </head>
 
-<body>
+<body onload="initCurrent()">
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
@@ -93,7 +98,7 @@
                         <li>
                             <a class="profile-pic" href="#">
                                 <img src="../admin/plugins/images/users/varun.jpg" alt="user-img" width="36"
-                                    class="img-circle"><span class="text-white font-medium">Steave</span></a>
+                                    class="img-circle" id="user-photo"><span class="text-white font-medium" id="user-name">Steave</span></a>
                         </li>
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
@@ -144,13 +149,7 @@
                             </a>
                         </li>
                         
-                        <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="blank.html"
-                                aria-expanded="false">
-                                <i class="fa fa-columns" aria-hidden="true"></i>
-                                <span class="hide-menu">Help</span>
-                            </a>
-                        </li>
+                        
                         
                         
                     </ul>
@@ -180,8 +179,7 @@
                             <ol class="breadcrumb ml-auto">
                                 <li><a href="#">help</a></li>
                             </ol>
-                            <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank"
-                                class="btn btn-danger  d-none d-md-block pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Log out</a>
+                            <div  class="btn btn-danger  d-none d-md-block pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light" onclick="logOut()">Log out</div>
                         </div>
                     </div>
                 </div>
@@ -203,10 +201,10 @@
                             <h3 class="box-title">Current requests table</h3>
                             <p class="text-muted">Wait until the curresponding reprography center approve your <code>REQUEST.</code></p>
                             <div class="table-responsive">
-                                <table class="table">
+                                <table class="table" id="my-table">
                                     <thead>
                                         <tr>
-                                            <th class="border-top-0">#</th>
+                                            <th class="border-top-0">reprography</th>
                                             <th class="border-top-0">drive link</th>
                                             <th class="border-top-0">date</th>
                                             <th class="border-top-0">time</th>
@@ -214,48 +212,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Deshmukh</td>
-                                            <td>Prohaska</td>
-                                            <td>@Genelia</td>
-                                            <td class="text-danger">pending</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Deshmukh</td>
-                                            <td>Gaylord</td>
-                                            <td>@Ritesh</td>
-                                            <td class="text-danger">pending</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Sanghani</td>
-                                            <td>Gusikowski</td>
-                                            <td>@Govinda</td>
-                                            <td class="text-danger">pending</td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Roshan</td>
-                                            <td>Rogahn</td>
-                                            <td>@Hritik</td>
-                                            <td class="text-danger">pending</td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>Joshi</td>
-                                            <td>Hickle</td>
-                                            <td>@Maruti</td>
-                                            <td class="text-danger">pending</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>Nigam</td>
-                                            <td>Eichmann</td>
-                                            <td>@Sonu</td>
-                                            <td class="text-danger">pending</td>
-                                        </tr>
+                                        
                                     </tbody>
                                 </table>
                             </div>
