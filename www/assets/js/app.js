@@ -147,15 +147,20 @@ function accept(id) {
 
     db.collection('admin').doc(docId).collection('requests').doc(id).get().then( obj => {
         var d = obj.data()
-        document.getElementById('json-data').innerText =  JSON.stringify(d,[
+        var li = [
             'email','date','time','docLink','copies','paperSide','paperSize','xeroxType'
-        ],10);
-        var atag = document.createElement('a')
-        atag.setAttribute('href',d.docLink)
-        atag.setAttribute('target','_blank')
-        atag.setAttribute('class',"btn btn-success")
-        atag.innerText = "visit page"
-        document.getElementById('accept-part').append(atag)
+        ]
+        var tb = document.getElementById('accept-table')
+        li.forEach(ele => {
+            var r = document.createElement('tr')
+            var hd = document.createElement('th')
+            hd.innerText = ele
+            var dd = document.createElement('td')
+            dd.innerText = d[ele]
+            r.append(hd)
+            r.append(dd)
+            tb.append(r)
+        });
 
         db.collection('admin').doc(docId).collection('requests').doc(id).update({
             reqStatus:"done"

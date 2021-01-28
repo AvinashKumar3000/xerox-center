@@ -26,6 +26,13 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-firestore.js"></script>
     <script src="../assets/js/app.js"></script>
+    <style>
+        #accept-table tbody th,
+        #accept-table tbody td
+        {
+            padding:10px
+        }
+    </style>
 </head>
 
 <body onload="initDashboard()">
@@ -178,7 +185,7 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-6 col-sm-6 col-xs-12">
                         <div class="white-box analytics-info">
-                            <h3 class="box-title">Bending requests</h3>
+                            <h3 class="box-title">Pending requests</h3>
                             <ul class="list-inline two-part d-flex align-items-center mb-0">
                                 <li>
                                     <div id="sparklinedash4"><canvas width="67" height="30"
@@ -210,8 +217,11 @@
                             <h3 class="box-title">PRINT DETAILS</h3>
                             <p class="text-muted">After <code>ACCEPT</code> action is performed. the details will be shown here.</p>
                             <div class="card">
-                                <div class="card-body" id="accept-part">
-                                    <p id="json-data"></p>
+                                <div class="card-body" >
+                                    <table >
+                                        <tbody id="accept-table">
+                                        </tbody>
+                                      </table>
                                 </div>
                             </div>
                         </div>
