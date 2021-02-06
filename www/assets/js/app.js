@@ -179,3 +179,55 @@ function accept(id) {
 
     })
 }
+
+function forgetPass(){
+    var user = window.prompt("username :");
+    if(user !== null && user !== ""){
+        db.collection('admin').get().then( (docLi) =>  {
+            var status = true   
+            docLi.forEach(ele => {
+                    var d = ele.data()
+                    if(d.user === user){
+                        status = false
+                        var newpass = window.prompt("new password : ");
+                        if(newpass !== null && newpass !== ""){
+                            db.collection('admin').doc(ele.id).update({
+                                pass:newpass
+                            }).then( () => {
+                                window.alert(`the password for user [ ${ user } ] is changed successfully.`)
+                            })
+                        }
+                    }
+            });
+            if(status){
+                window.alert("username is not found.")
+            }
+        }) 
+        
+    }
+
+    /** var user = document.getElementById('form-user').value
+        var pass = document.getElementById('form-pass').value
+        if(user !== "" && pass !== ""){
+            db.collection('admin').get().then( (docLi) =>  {
+                var status = true   
+                docLi.forEach(ele => {
+                        var d = ele.data()
+                        if(d.user === user && d.pass === pass){
+                            status = false
+                            console.log('success')
+                            localStorage.setItem('auth',true)
+                            localStorage.setItem('id',ele.id)
+                            localStorage.setItem('user',d.displayName)
+                            window.location.replace("dashboard.html")
+                        }
+                });
+                if(status){
+                    window.alert("username or password is wrong")
+                }
+            })
+        }else{
+            window.alert("input fields cannot be empty")
+        }
+    **/
+}
